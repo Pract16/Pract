@@ -1,0 +1,36 @@
+create table account(
+id serial primary key,
+name varchar(128),
+first_name varchar(128),
+last_name varchar(128),
+pass varchar(64),
+status_onl int
+);
+
+create table session
+(
+id serial primary key,
+id_account int,
+token varchar(256),
+time_begins timestamp,
+time_end timestamp
+);
+
+--(for another user)
+--privelege 0-not readed
+--1-can read
+--2 can read and write
+
+create table note
+(
+id serial primary key,
+account_id int not null,
+privelege int,
+text varchar(256),
+img bytea,
+date timestamp
+)
+
+--add relations
+alter table session ADD CONSTRAINT fk_session_account FOREIGN KEY (id_account) references account(id);
+alter table note ADD CONSTRAINT fk_note_account FOREIGN KEY (account_id) references account(id);
