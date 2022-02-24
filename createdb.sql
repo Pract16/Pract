@@ -10,11 +10,15 @@ status_onl int
 create table session
 (
 id serial primary key,
-id_account int,
+id_account int not null,
 token varchar(256),
 time_begins timestamp,
 time_end timestamp
 );
+
+create table session_note
+(session_id int not null,
+note_id int not null);
 
 --(for another user)
 --privelege 0-not readed
@@ -33,4 +37,6 @@ date timestamp
 
 --add relations
 alter table session ADD CONSTRAINT fk_session_account FOREIGN KEY (id_account) references account(id);
+alter table session_note ADD CONSTRAINT fk_session_note FOREIGN KEY (note_id) references note(id);
+alter table session_note ADD CONSTRAINT fk_session_note2 FOREIGN KEY (session_id) references session(id);
 alter table note ADD CONSTRAINT fk_note_account FOREIGN KEY (account_id) references account(id);
