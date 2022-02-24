@@ -1,0 +1,6 @@
+create schema data;
+create schema func;
+alter table account set schema data;
+alter table session set schema data;
+alter table note set schema data;
+alter table session_note set schema data;
