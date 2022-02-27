@@ -1,0 +1,36 @@
+--ACCOUNT
+create or replace procedure func.createAccount(nameN varchar(128),
+first_nameN varchar(128),
+last_nameN varchar(128),
+passN varchar(64))
+    language plpgsql
+as
+$$
+begin
+insert into data.account(name, first_name, last_name, pass, status_onl) values
+(nameN, first_nameN, last_nameN, passN, 0);
+end;
+$$;
+
+create or replace procedure func.deleteAccount(id_account int)
+    language plpgsql
+as
+$$
+begin
+delete from data.account where id = id_account;
+end;
+$$;
+
+
+create or replace procedure func.updateAccount(id_account int, nameN varchar(128),
+first_nameN varchar(128),
+last_nameN varchar(128),
+passN varchar(64))
+    language plpgsql
+as
+$$
+begin
+update data.account set name = nameN, first_name = first_nameN, last_name = last_nameN, pass = passN where id = id_account;
+end;
+$$;
+--NOTE
