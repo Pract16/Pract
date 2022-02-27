@@ -33,4 +33,99 @@ begin
 update data.account set name = nameN, first_name = first_nameN, last_name = last_nameN, pass = passN where id = id_account;
 end;
 $$;
+
+--WORK with sessions
+
+create or replace procedure func.beginonline(id_account int)
+    language plpgsql
+as
+$$
+declare
+datatimeB timestamp;
+begin
+SELECT NOW()::timestamp into datatimeB;
+update data.account set status_onl = 1 where id = id_account;
+insert into data.session(id_account,token,time_begins,time_end) values
+(id_account ,uuid_generate_v4(),datatimeB, NULL);
+end;
+$$;
+
+create or replace procedure func.endonline(id_session int)
+    language plpgsql
+as
+$$
+declare
+datatimeE timestamp;
+begin
+SELECT NOW()::timestamp into datatimeE;
+update data.account set status_onl = 0 where id = (select id_account from data.session where id = id_session limit 1);
+update data.session set time_end = datatimeE where id = id_session;
+end;
+$$;
 --NOTE
+create or replace procedure func.addnote(account_id int, textN varchar(256) , imgN bytea)
+    language plpgsql
+as
+$$
+declare
+datatimeN timestamp;
+begin
+SELECT NOW()::timestamp into datatimeN;
+insert into data.note(account_id, privelege, text,img,date) values
+(account_id, 0, textN, imgN, datatimeN);
+end;
+$$;
+
+create or replace procedure func.updatenote(id_note int, privelegeN int, textN varchar(256 ),imgN bytea)
+    language plpgsql
+as
+$$
+declare
+datatimeN timestamp;
+begin
+SELECT NOW()::timestamp into datatimeN;
+Update data.note set privelege =  privelegeN , text = textN ,img = imgN where id = id_note;
+end;
+$$;
+
+create or replace procedure func.deletenote(id_note int)
+    language plpgsql
+as
+$$
+begin
+delete from data.note where id = id_note;
+end;
+$$;
+
+create or replace function func.selectnote()
+returns TABLE(account_id_D int,
+privelege_D int,
+text_D varchar(256),
+img_D bytea,
+date_D timestamp)
+    language plpgsql
+as
+$$
+begin
+return query
+        (
+select account_id, privelege, text, img, date from data.note where privelege > 0);
+end;
+$$;
+
+create or replace function func.selectMYnote(account_iDD int)
+returns TABLE(account_id_D int,
+privelege_D int,
+text_D varchar(256),
+img_D bytea,
+date_D timestamp)
+    language plpgsql
+as
+$$
+begin
+return query
+        (
+select account_id, privelege, text, img, date from data.note where account_id = account_iDD);
+end;
+$$;
+
