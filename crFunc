@@ -36,17 +36,20 @@ $$;
 
 --WORK with sessions
 
-create or replace procedure func.beginonline(id_account int)
+create or replace procedure func.beginonline(id_account int, passwd varchar(128))
     language plpgsql
 as
 $$
 declare
 datatimeB timestamp;
 begin
+if(passwd = (select pass from data.account where id = id_account))
+then
 SELECT NOW()::timestamp into datatimeB;
 update data.account set status_onl = 1 where id = id_account;
 insert into data.session(id_account,token,time_begins,time_end) values
 (id_account ,uuid_generate_v4(),datatimeB, NULL);
+end if;
 end;
 $$;
 
@@ -126,6 +129,25 @@ begin
 return query
         (
 select account_id, privelege, text, img, date from data.note where account_id = account_iDD);
+end;
+$$;
+
+
+create or replace procedure func.sharenote(id_account int, id_dependet_user int, id_note int, perms varchar(64))
+    language plpgsql
+as
+$$
+begin
+insert into data.note_permission values(id_account, id_dependet_user, id_note, perms);
+end;
+$$;
+
+create or replace procedure func.editshare(id_account int, id_dependet_user int, id_noteL int, perms varchar(64))
+    language plpgsql
+as
+$$
+begin
+update data.note_permission set id_user = id_account,id_dependet_user = id_dependet_user, id_noteL = id_note, permission = perms;
 end;
 $$;
 
