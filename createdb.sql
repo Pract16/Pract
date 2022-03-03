@@ -39,7 +39,8 @@ per int);
 create table data.note_permission
 (
 id_user int,
-id_dependet_user id,
+id_dependet_user int,
+id_note int,
 permission varchar(64)
 );
 
