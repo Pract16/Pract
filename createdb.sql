@@ -54,4 +54,4 @@ alter table data.note DROP CONSTRAINT fk_note_account, ADD CONSTRAINT fk_note_ac
 
 alter table data.note_permission DROP CONSTRAINT fk_note_permission, ADD CONSTRAINT fk_note_permission FOREIGN KEY (id_user) references data.account(id) ON DELETE CASCADE;
 alter table data.note_permission DROP CONSTRAINT fk_note_permission2, ADD CONSTRAINT fk_note_permission2 FOREIGN KEY (id_dependet_user) references data.account(id) ON DELETE CASCADE;
-
+alter table data.note_permission ADD CONSTRAINT fk_note_per_note FOREIGN KEY (id_note) references data.note(id) ON DELETE CASCADE;
