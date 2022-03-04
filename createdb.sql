@@ -47,14 +47,11 @@ permission varchar(64)
 create table data.per_user(id_user int, id_per int);
 
 --add relations
-alter table data.session ADD CONSTRAINT fk_session_account FOREIGN KEY (id_account) references data.account(id);
-alter table data.session_note ADD CONSTRAINT fk_session_note FOREIGN KEY (note_id) references data.note(id);
-alter table data.session_note ADD CONSTRAINT fk_session_note2 FOREIGN KEY (session_id) references data.session(id);
-alter table data.note ADD CONSTRAINT fk_note_account FOREIGN KEY (account_id) references data.account(id);
+alter table data.session DROP CONSTRAINT fk_session_account, ADD CONSTRAINT fk_session_account FOREIGN KEY (id_account) references data.account(id) ON DELETE CASCADE;
+alter table data.session_note DROP CONSTRAINT fk_session_note, ADD CONSTRAINT fk_session_note FOREIGN KEY (note_id) references data.note(id) ON DELETE CASCADE;
+alter table data.session_note DROP CONSTRAINT fk_session_note2, ADD CONSTRAINT fk_session_note2 FOREIGN KEY (session_id) references data.session(id)  ON DELETE CASCADE;
+alter table data.note DROP CONSTRAINT fk_note_account, ADD CONSTRAINT fk_note_account FOREIGN KEY (account_id) references data.account(id) ON DELETE CASCADE;
 
-alter table data.per_user ADD CONSTRAINT fk_per_user FOREIGN KEY (id_per) references data.permission(id);
-alter table data.per_user ADD CONSTRAINT fk_pewr_user FOREIGN KEY (id_user) references data.users(id);
-
-alter table data.note_permission ADD CONSTRAINT fk_note_permission FOREIGN KEY (id_user) references data.account(id);
-alter table data.note_permission ADD CONSTRAINT fk_note_permission2 FOREIGN KEY (id_dependet_user) references data.account(id);
+alter table data.note_permission DROP CONSTRAINT fk_note_permission, ADD CONSTRAINT fk_note_permission FOREIGN KEY (id_user) references data.account(id) ON DELETE CASCADE;
+alter table data.note_permission DROP CONSTRAINT fk_note_permission2, ADD CONSTRAINT fk_note_permission2 FOREIGN KEY (id_dependet_user) references data.account(id) ON DELETE CASCADE;
 
