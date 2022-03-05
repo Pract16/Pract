@@ -202,11 +202,12 @@ else
 insert into control.control(user_id,id_session, whatdoing,date) values (id_accountn,id_session, 'user with account id='||id_accountn||'try share note with id= '||id_noten||' with permissions = '||permissions||'in session = '||id_session||' and FAILED',datatimeN);
 end if;
 end;
-
+$$;
 
 create or replace procedure func.editshare(id_account int, id_dependet_user int, id_noteL int, perms varchar(64))
     language plpgsql
 as
+$$
 declare 
 id_session int;
 datatimeN timestamp;
